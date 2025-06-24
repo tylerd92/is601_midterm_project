@@ -2,7 +2,7 @@ import pytest
 import os
 from decimal import Decimal
 from pathlib import Path
-from app.calculator_config import CalculatorConfig
+from app.config.calculator_config import CalculatorConfig
 from app.exceptions import ConfigurationError
 
 os.environ['CALCULATOR_MAX_HISTORY_SIZE'] = '500'
@@ -113,7 +113,7 @@ def test_default_fallbacks():
     assert config.default_encoding == 'utf-8'
 
 def test_get_project_root():
-    from app.calculator_config import get_project_root
+    from app.config.calculator_config import get_project_root
     assert (get_project_root() / "app").exists()
 
 def test_log_dir_property():
