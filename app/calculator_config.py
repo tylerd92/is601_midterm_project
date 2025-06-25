@@ -13,7 +13,7 @@ load_dotenv()
 
 def get_project_root() -> Path:
     current_file = Path(__file__)
-    return current_file.parent.parent.parent
+    return current_file.parent.parent
 
 @dataclass
 class CalculatorConfig():

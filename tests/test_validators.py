@@ -1,8 +1,9 @@
 import pytest
 from decimal import Decimal
-from app.config.calculator_config import CalculatorConfig
+from app.calculator_config import CalculatorConfig
 from app.exceptions import ValidationError
 from app.input_validators import InputValidator
+
 
 config = CalculatorConfig(max_input_value=Decimal('1000000'))
 
