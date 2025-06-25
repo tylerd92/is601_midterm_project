@@ -15,8 +15,22 @@ def get_project_root() -> Path:
     current_file = Path(__file__)
     return current_file.parent.parent
 
+"""
+This module defines the configuration for the calculator application.
+It includes settings for base directory, history size, auto-save behavior, precision, maximum input value, and default encoding.
+The configuration can be customized through environment variables or by passing parameters to the CalculatorConfig class.
+"""
 @dataclass
 class CalculatorConfig():
+    """
+        @param base_dir: Base directory for the calculator application.
+        @param max_history_size: Maximum number of history entries to keep.
+        @param auto_save: Whether to automatically save history after each operation.
+        @param precision: Number of decimal places to use in calculations.
+        @param max_input_value: Maximum value allowed for input calculations.
+        @param default_encoding: Default encoding for input and output files.
+        @raises ConfigurationError: If any configuration parameter is invalid.
+    """
     def __init__(
         self,
         base_dir: Optional[Path] = None,
