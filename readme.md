@@ -23,7 +23,7 @@ CALCULATOR_AUTO_SAVE=true
 CALCULATOR_DEFAULT_ENCODING=utf-8
 ```
 
-Run main.py to excute program
+Run main.py to execute program
 ```
 python3 main.py
 ```
@@ -31,7 +31,7 @@ python3 main.py
 Calculator Commands
 ```
 help - Displays the help menu
-add, subtract, multiply, divide, power, root - Perform calculations
+add, subtract, multiply, divide, power, root - Perform calculations (#TODO modulus, integer divide, percent, absolute value difference)
 history - Show calculation history
 clear - Clear calculation history
 undo - Undo the last calculation
