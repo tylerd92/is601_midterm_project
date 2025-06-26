@@ -143,9 +143,9 @@ class IntDivide(Operation):
     @return: The result of integer division of a by b.
     This method validates the operands and performs integer division.
     """
-    def execute(self, a: Decimal, b: Decimal) -> int:
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
         self.validate_operands(a, b)
-        return int(a // b)
+        return a // b
         
 class Percent(Operation):
     def validate_operands(self, a: Decimal, b: Decimal) -> None:
