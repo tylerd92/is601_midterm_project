@@ -177,8 +177,8 @@ class Calculator:
             for calc in self.history:
                 history_data.append({
                     'operation': str(calc.operation),
-                    'operand1': str(calc.first_operand),
-                    'operand2': str(calc.second_operand),
+                    'first_operand': str(calc.first_operand),
+                    'second_operand': str(calc.second_operand),
                     'result': str(calc.result),
                     'timestamp': calc.timestamp.isoformat()
                 })
@@ -188,7 +188,7 @@ class Calculator:
                 df.to_csv(self.config.history_file, index=False)
                 logging.info(f"History saved successfully to {self.config.history_file}")
             else: 
-                pd.DataFrame(columns=['operation', 'operand1', 'operand2', 'result', 'timestamp']
+                pd.DataFrame(columns=['operation', 'first_operand', 'second_operand', 'result', 'timestamp']
                              ).to_csv(self.config.history_file, index=False)
                 logging.info("Empty history saved")
         except Exception as e:
@@ -210,8 +210,8 @@ class Calculator:
                     self.history = [
                         Calculation.from_dict({
                             'operation': row['operation'],
-                            'operand1': row['operand1'],
-                            'operand2': row['operand2'],
+                            'first_operand': row['first_operand'],
+                            'second_operand': row['second_operand'],
                             'result': row['result'],
                             'timestamp': row['timestamp']
                         })
@@ -239,8 +239,8 @@ class Calculator:
         for calc in self.history:
             history_data.append({
                 'operation': str(calc.operation),
-                'operand1': str(calc.first_operand),
-                'operand2': str(calc.second_operand),
+                'first_operand': str(calc.first_operand),
+                'second_operand': str(calc.second_operand),
                 'result': str(calc.result),
                 'timestamp': calc.timestamp
             })
@@ -251,7 +251,7 @@ class Calculator:
         Show the calculation history as a list of strings.
         @return: A list of strings representing the history of calculations.
         This method formats each calculation in the history as a string
-        in the format "operation(operand1, operand2) = result".
+        in the format "operation(first_operand, second_operand) = result".
         """
         return [
             f"{calc.operation}({calc.first_operand}, {calc.second_operand}) = {calc.result}"

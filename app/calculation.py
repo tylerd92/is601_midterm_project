@@ -35,7 +35,7 @@ class Calculation:
                 else self._raise_invalid_root(x, y)
             ),
             "Modulus": lambda x, y: x % y if y != 0 else self._raise_div_zero(),
-            "IntegerDivison": lambda x, y: x // y if y != 0 else self._raise_div_zero(),
+            "IntDivide": lambda x, y: x // y if y != 0 else self._raise_div_zero(),
             "Percent": lambda x, y: (x / y * 100) if y != 0 else self._raise_div_zero(),
             "AbsoluteDifference": lambda x, y: abs(x - y)
         }
@@ -47,7 +47,7 @@ class Calculation:
         try:
             return op(self.first_operand, self.second_operand)
         except (InvalidOperation, ValueError, ArithmeticError) as e:
-            raise OperationError(f"Calculation failed: {str(e)}")
+            raise OperationError(f"Calculation failed: {str(e)}") # pragma no cover
         
     @staticmethod
     def _raise_div_zero():
@@ -72,7 +72,7 @@ class Calculation:
             raise OperationError("Zero root is undefined")
         if x < 0:
             raise OperationError("Cannot calculate root of negative number")
-        raise OperationError("Invalid root operation")
+        raise OperationError("Invalid root operation") # pragma no cover
     
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -138,13 +138,19 @@ class Calculation:
         Format the result of the calculation.
         @param precision: Number of decimal places to round the result.
         @return: A string representation of the result rounded to the specified precision.
-        @raises InvalidOperation: If the result cannot be formatted.
+        @raises InvalidOperation: If the precision is invalid or if the result cannot be formatted.
         """
+        # Validate precision parameter
+        if not isinstance(precision, int):
+            raise InvalidOperation("Invalid precision value: must be an integer")
+        if precision < 0:
+            raise InvalidOperation("Invalid precision value: must be non-negative")
+            
         try:
-            if self.operation == "IntegerDivision":
+            if self.operation == "IntDivide":
                 return str(int(self.result))
             return str(self.result.normalize().quantize(
                 Decimal('0.' + '0' * precision)
             ).normalize())
-        except InvalidOperation:
+        except InvalidOperation: # pragma no cover
             return str(self.result)

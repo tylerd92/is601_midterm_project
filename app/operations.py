@@ -6,7 +6,7 @@ from app.exceptions import ValidationError
 class Operation(ABC):
     @abstractmethod
     def execute(self, a: Decimal, b: Decimal) -> Decimal:
-        pass
+        pass # pragma: no cover
 
     def validate_operands(self, a: Decimal, b: Decimal) -> None:
         pass
