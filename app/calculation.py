@@ -77,8 +77,8 @@ class Calculation:
     def to_dict(self) -> Dict[str, Any]:
         return {
             'operation': self.operation,
-            'operand1': str(self.first_operand),
-            'operand2': str(self.second_operand),
+            'first_operand': str(self.first_operand),
+            'second_operand': str(self.second_operand),
             'result': str(self.result),
             'timestamp': self.timestamp.isoformat()
         }
@@ -94,8 +94,8 @@ class Calculation:
         try:
             calc = Calculation(
                 operation=data['operation'],
-                first_operand=Decimal(data['operand1']),
-                second_operand=Decimal(data['operand2'])
+                first_operand=Decimal(data['first_operand']),
+                second_operand=Decimal(data['second_operand'])
             )
 
             calc.timestamp = datetime.datetime.fromisoformat(data['timestamp'])
@@ -118,7 +118,7 @@ class Calculation:
         return (
             f"Calculation(operation='{self.operation}', "
             f"first_operand={self.first_operand}, "
-            f"operand2={self.second_operand}, "
+            f"second_operand={self.second_operand}, "
             f"result={self.result}, "
             f"timestamp='{self.timestamp.isoformat()}')"
         )
