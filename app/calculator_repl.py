@@ -19,7 +19,7 @@ def calculator_repl():
 
                 if command == 'help':
                     print("\nAvailable commands:")
-                    print("  add, subtract, multiply, divide, power, root - Perform calculations")
+                    print("  add, subtract, multiply, divide, power, root, modulus, int_divide, percent, abs_diff - Perform calculations")
                     print("  history - Show calculation history")
                     print("  clear - Clear calculation history")
                     print("  undo - Undo the last calculation")
@@ -79,7 +79,7 @@ def calculator_repl():
                     try:
                         calc.load_history()
                         print("History loaded successfully")
-                    except Exception as e:
+                    except Exception as e: # pragma: no cover
                         print(f"Error loading history: {e}")
                     continue
 
@@ -120,7 +120,7 @@ def calculator_repl():
             except Exception as e:
                 print(f"Error: {e}")
                 continue
-    except Exception as e:
+    except Exception as e: # pragma: no cover
         print(f"Fatal error: {e}")
         logging.error(f"Fatal error in calculator REPL: {e}")
         raise

@@ -107,3 +107,31 @@ def test_validation_error(mock_print, mock_input):
 def test_exception_after_add(mock_print, mock_input):
     calculator_repl()
     mock_print.assert_any_call("Unexpected error: ")
+
+@patch('builtins.input', side_effect=['modulus', '10', '3', 'exit'])
+@patch('builtins.print')
+def test_modulus_command(mock_print, mock_input):
+    calculator_repl()
+    found = any("Result:" in str(call[0][0]) and "1" in str(call[0][0]) for call in mock_print.call_args_list)
+    assert found
+
+@patch('builtins.input', side_effect=['int_divide', '10', '3', 'exit'])
+@patch('builtins.print')
+def test_integer_divide_command(mock_print, mock_input):
+    calculator_repl()
+    found = any("Result:" in str(call[0][0]) and "3" in str(call[0][0]) for call in mock_print.call_args_list)
+    assert found
+
+@patch('builtins.input', side_effect=['percent', '50', '200', 'exit'])
+@patch('builtins.print')
+def test_percent_command(mock_print, mock_input):
+    calculator_repl()
+    found = any("Result:" in str(call[0][0]) and "25" in str(call[0][0]) for call in mock_print.call_args_list)
+    assert found
+
+@patch('builtins.input', side_effect=['abs_diff', '5', '8', 'exit'])
+@patch('builtins.print')
+def test_absolute_value_difference_command(mock_print, mock_input):
+    calculator_repl()
+    found = any("Result:" in str(call[0][0]) and "3" in str(call[0][0]) for call in mock_print.call_args_list)
+    assert found
