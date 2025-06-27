@@ -231,6 +231,16 @@ class TestPercent(BaseOperationTest):
         }
     }
 
+class TestAbsoluteDifference(BaseOperationTest):
+    operation_class = AbsoluteDifference
+    valid_test_cases = {
+        "positive_numbers": {"a": "4", "b": "6", "expected": "2"},
+        "negative_numbers": {"a": "-3", "b": "-4", "expected": "1"},
+        "mixed_signs": {"a": "8", "b": "-5", "expected": "13"},
+        "decimals": {"a": "5.5", "b": "4.5", "expected": "1.0"}
+    }
+    invalid_test_cases = {}
+
 class TestOperationFactory:
     def test_create_valid_operations(self):
         operation_map = {
@@ -240,6 +250,10 @@ class TestOperationFactory:
             'divide': Division,
             'power': Power,
             'root': Root,
+            'modulus': Modulus,
+            'int_divide': IntDivide,
+            'percent': Percent,
+            'abs_diff': AbsoluteDifference
         }
 
         for op_name, op_class in operation_map.items():
@@ -267,3 +281,8 @@ class TestOperationFactory:
 
         with pytest.raises(TypeError, match="Operation class must inherit"):
             OperationFactory.register_operation("invalid", InvalidOperation)
+
+    def test_get_operations(self):
+        operations_list = OperationFactory.get_operations()
+        assert len(operations_list) == 11
+        assert 'power' in operations_list
