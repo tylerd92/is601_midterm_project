@@ -4,6 +4,7 @@ from datetime import datetime
 from app.calculation import Calculation
 from app.exceptions import OperationError
 import logging
+from decimal import Decimal
 
 def test_addition():
     calc = Calculation(operation="Addition", first_operand=Decimal("2"), second_operand=Decimal("3"))
@@ -178,4 +179,81 @@ def test_repr_division_decimal():
         f"timestamp='{calc.timestamp.isoformat()}')"
     )
     assert repr(calc) == expected
+
+@pytest.mark.parametrize(
+    "operation, x, y, expected",
+    [
+        ("Addition", Decimal("1"), Decimal("2"), Decimal("3")),
+        ("Subtraction", Decimal("5"), Decimal("3"), Decimal("2")),
+        ("Multiplication", Decimal("2"), Decimal("4"), Decimal("8")),
+        ("Division", Decimal("10"), Decimal("2"), Decimal("5")),
+        ("Power", Decimal("2"), Decimal("3"), Decimal("8")),
+        ("Root", Decimal("9"), Decimal("2"), Decimal("3")),
+        ("Modulus", Decimal("10"), Decimal("3"), Decimal("1")),
+        ("IntDivide", Decimal("10"), Decimal("3"), Decimal("3")),
+        ("Percent", Decimal("50"), Decimal("200"), Decimal("25")),
+        ("AbsoluteDifference", Decimal("7"), Decimal("2"), Decimal("5")),
+        ("AbsoluteDifference", Decimal("2"), Decimal("7"), Decimal("5")),
+    ]
+)
+def test_calculate_valid_operations(operation, x, y, expected):
+    calc = Calculation(operation=operation, first_operand=x, second_operand=y)
+    assert calc.calculate() == expected
+
+@pytest.mark.parametrize(
+    "operation, x, y, error_msg",
+    [
+        ("Division", Decimal("1"), Decimal("0"), "Division by zero is not allowed"),
+        ("Modulus", Decimal("5"), Decimal("0"), "Division by zero is not allowed"),
+        ("IntDivide", Decimal("5"), Decimal("0"), "Division by zero is not allowed"),
+        ("Percent", Decimal("5"), Decimal("0"), "Division by zero is not allowed"),
+        ("Power", Decimal("2"), Decimal("-2"), "Negative exponents are not supported"),
+        ("Root", Decimal("-4"), Decimal("2"), "Cannot calculate root of negative number"),
+        ("Root", Decimal("4"), Decimal("0"), "Zero root is undefined"),
+        ("UnknownOp", Decimal("1"), Decimal("2"), "Unknown operation"),
+    ]
+)
+def test_calculate_invalid_operations(operation, x, y, error_msg):
+    if operation == "UnknownOp":
+        with pytest.raises(OperationError, match=error_msg):
+            Calculation(operation=operation, first_operand=x, second_operand=y).calculate()
+    else:
+        with pytest.raises(OperationError, match=error_msg):
+            Calculation(operation=operation, first_operand=x, second_operand=y).calculate()
+
+def test_equal_return_not_implemented():
+    calc = Calculation(operation="Addition", first_operand=Decimal("2"), second_operand=Decimal("3"))
+    # Compare with a non-Calculation object
+    other_obj = "Not a calculation"
+    assert calc.__eq__(other_obj) is NotImplemented
+
+def test_format_invalid_operation():
+    calc = Calculation(operation="Division", first_operand=Decimal("1"), second_operand=Decimal("3"))
+    with pytest.raises(InvalidOperation, match="Invalid precision value"):
+        calc.format_result(precision=-1)  # Negative precision should raise an error
+    with pytest.raises(InvalidOperation, match="Invalid precision value"):
+        calc.format_result(precision="two")  # Non-integer precision should raise an error
+
+def test_format_result_invalid_precision_type():
+    calc = Calculation(operation="Addition", first_operand=Decimal("1"), second_operand=Decimal("2"))
+    with pytest.raises(InvalidOperation, match="Invalid precision value: must be an integer"):
+        calc.format_result(precision="not_an_int")
+
+def test_format_result_negative_precision():
+    calc = Calculation(operation="Addition", first_operand=Decimal("1"), second_operand=Decimal("2"))
+    with pytest.raises(InvalidOperation, match="Invalid precision value: must be non-negative"):
+        calc.format_result(precision=-5)
+
+def test_format_result_handles_invalid_operation_gracefully():
+    # Simulate a result that cannot be quantized (e.g., NaN)
+    calc = Calculation(operation="Addition", first_operand=Decimal("NaN"), second_operand=Decimal("1"))
+    # Should return the string representation of the result
+    assert calc.format_result(precision=2) == "NaN"
+
+def test_format_result_integer_division_label():
+    calc = Calculation(operation="IntDivide", first_operand=Decimal("5"), second_operand=Decimal("2"))
+    # Manually set result to match the behavior
+    calc.result = Decimal("2")
+    assert calc.format_result() == "2"
+
 
