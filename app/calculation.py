@@ -35,7 +35,7 @@ class Calculation:
                 else self._raise_invalid_root(x, y)
             ),
             "Modulus": lambda x, y: x % y if y != 0 else self._raise_div_zero(),
-            "IntegerDivison": lambda x, y: x // y if y != 0 else self._raise_div_zero(),
+            "IntDivide": lambda x, y: x // y if y != 0 else self._raise_div_zero(),
             "Percent": lambda x, y: (x / y * 100) if y != 0 else self._raise_div_zero(),
             "AbsoluteDifference": lambda x, y: abs(x - y)
         }

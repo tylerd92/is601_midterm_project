@@ -33,17 +33,45 @@ def test_power():
     calc = Calculation(operation="Power", first_operand=Decimal("2"), second_operand=Decimal("3"))
     assert calc.result == Decimal("8")
 
-def test_negative_power():
-    with pytest.raises(OperationError, match="Negative exponents are not supported"):
-        Calculation(operation="Power", first_operand=Decimal("2"), second_operand=Decimal("-3"))
-
 def test_root():
     calc = Calculation(operation="Root", first_operand=Decimal("16"), second_operand=Decimal("2"))
     assert calc.result == Decimal("4")
 
+"""
+Add tests for modulus, interger division, percent, and absolute difference
+"""
+
+def test_modulus():
+    calc = Calculation(operation="Modulus", first_operand=Decimal("10"), second_operand=Decimal("3"))
+    assert calc.result == Decimal("1")
+
+def test_integer_division():
+    calc = Calculation(operation="IntDivide", first_operand=Decimal("10"), second_operand=Decimal("3"))
+    assert calc.result == Decimal("3")
+
+def test_percent():
+    calc = Calculation(operation="Percent", first_operand=Decimal("50"), second_operand=Decimal("200"))
+    assert calc.result == Decimal("25")
+
+def test_absolute_difference():
+    calc = Calculation(operation="AbsoluteDifference", first_operand=Decimal("4"), second_operand=Decimal("6"))
+    assert calc.result == Decimal("2")
+
+def test_negative_power():
+    with pytest.raises(OperationError, match="Negative exponents are not supported"):
+        Calculation(operation="Power", first_operand=Decimal("2"), second_operand=Decimal("-3"))
+
 def test_invalid_root():
      with pytest.raises(OperationError, match="Cannot calculate root of negative number"):
          calc = Calculation(operation="Root", first_operand=Decimal("-16"), second_operand=Decimal("2"))
+
+def test_modulus_by_zero():
+    with pytest.raises(OperationError, match="Division by zero is not allowed"):
+        Calculation(operation="Modulus", first_operand=Decimal("10"), second_operand=Decimal("0"))
+
+def test_int_divide_by_zero():
+    with pytest.raises(OperationError, match="Division by zero is not allowed"):
+        Calculation(operation="IntDivide", first_operand=Decimal("5"), second_operand=Decimal("0"))
 
 def test_unknown_operation():
     with pytest.raises(OperationError, match="Unknown operation"):
@@ -78,8 +106,8 @@ def test_from_dict():
 def test_invalid_from_dict():
     data = {
         "operation": "Addition",
-        "operand1": "invalid",
-        "operand2": "3",
+        "first_operand": "invalid",
+        "second_operand": "3",
         "result": "5",
         "timestamp": datetime.now().isoformat()
     }
