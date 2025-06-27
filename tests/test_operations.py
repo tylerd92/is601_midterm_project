@@ -12,7 +12,27 @@ from app.operations import (
     Power,
     Root,
     OperationFactory,
+    Modulus,
+    IntDivide,
+    Percent,
+    AbsoluteDifference,
 )
+
+@pytest.mark.parametrize("operation_class", [
+    Addition,
+    Subtraction,
+    Multiplication,
+    Division,
+    Power,
+    Root,
+    Modulus,
+    Modulus,
+    IntDivide,
+    Percent,
+    AbsoluteDifference,
+])
+def test_operation_inheritance(operation_class):
+    assert issubclass(operation_class, Operation), f"{operation_class.__name__} must inherit from Operation"
 
 class TestOperation:
     def test_str_representation(self):
@@ -155,6 +175,60 @@ class TestRoot(BaseOperationTest):
             "error": ValidationError,
             "message": "Zero root is undefined"
         },
+    }
+
+class TestModulus(BaseOperationTest):
+    operation_class = Modulus
+    valid_test_cases = {
+        "positive_numbers": {"a": "5", "b": "3", "expected": "2"},
+        "negative_numbers": {"a": "-5", "b": "-3", "expected": "-2"},
+        "mixed_signs": {"a": "-5", "b": "3", "expected": "-2"},
+        "zero_divisor": {"a": "0", "b": "6", "expected": "0"},
+        "decimals": {"a": "5.5", "b": "3.3", "expected": "2.2"},
+    }
+    invalid_test_cases = {
+        "zero_dividend": {
+            "a": "8",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Modulus by zero is not allowed"
+        },
+    }
+
+class TestIntDivide(BaseOperationTest):
+    operation_class = IntDivide
+    valid_test_cases = {
+        "positive_numbers": {"a": "10", "b": "2", "expected": "5"},
+        "negative_numbers": {"a": "-12", "b": "-6", "expected": "2"},
+        "mixed_signs": {"a": "6", "b": "-3", "expected": "-2"},
+        "zero_divisor": {"a": "0", "b": "7", "expected": "0"}
+
+    }
+    invalid_test_cases = {
+        "divide_by_zero": {
+            "a": "7",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Divide by zero is not allowed"
+        },
+    }
+
+class TestPercent(BaseOperationTest):
+    operation_class = Percent
+    valid_test_cases = {
+        "positive_numbers": {"a": "15", "b": "100", "expected": "15"},
+        "negative_numbers": {"a": "-2", "b": "-10", "expected": "20.0"},
+        "mixed_signs": {"a": "-6", "b": "24", "expected": "-25"},
+        "zero_divisor": {"a": "0", "b": "100", "expected": "0"},
+        "decimals": {"a": "3.3", "b": "5.5", "expected": "60.0"}
+    }
+    invalid_test_cases = {
+        "divide_by_zero": {
+            "a": "3",
+            "b": "0",
+            "error": ValidationError,
+            "message": "Divide by zero is not allowed"
+        }
     }
 
 class TestOperationFactory:
