@@ -1,10 +1,13 @@
 from decimal import Decimal
 import logging
+from colorama import Style, Fore, init
 
 from app.calculator import Calculator
 from app.exceptions import OperationError, ValidationError
 from app.logger import AutoSaveObserver, LoggingObserver
 from app.operations import OperationFactory
+
+init()
 
 def calculator_repl():
     try:
@@ -35,17 +38,19 @@ def calculator_repl():
                         print("History saved successfully.")
                     except Exception as e: # pragma no cover
                         print(f"Warning: Could not save history: {e}")
-                    print("Goodbye!")
+                    print(Fore.GREEN + "Goodbye!")
                     break
 
                 if command == 'history':
                     history = calc.show_history()
                     if not history:
-                        print("No calculations in history") # pragma no cover
+                        print(Style.BRIGHT + Fore.CYAN +"No calculations in history") # pragma no cover
+                        print(Style.RESET_ALL)
                     else:
-                        print("\nCalculation History:")
+                        print(Fore.MAGENTA +"\nCalculation History:")
                         for i, entry in enumerate(history, 1):
-                            print(f"{i}. {entry}")
+                            print(Fore.CYAN + f"{i}. {entry}")
+                        print(Style.RESET_ALL) 
                     continue
 
                 if command == 'clear':
@@ -109,7 +114,8 @@ def calculator_repl():
                          print(f"Unexpected error: {e}")
                     continue
 
-                print(f"Unknown command: '{command}'. Type 'help' for available commands.")
+                print(Style.BRIGHT + Fore.RED + f"Unknown command: '{command}'. Type 'help' for available commands.")
+                print(Style.RESET_ALL)
 
             except KeyboardInterrupt:
                 print("\nOperation cancelled")
