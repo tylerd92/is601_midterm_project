@@ -31,8 +31,8 @@ python3 main.py
 Calculator Commands
 ```
 help - Displays the help menu
-add, subtract, multiply, divide, power, root, modulus, integer divide, 
-percent, absolute value difference - Perform calculations
+add, subtract, multiply, divide, power, root, modulus, int_divide, 
+percent, abs_diff - Perform calculations
 history - Show calculation history
 clear - Clear calculation history
 undo - Undo the last calculation
