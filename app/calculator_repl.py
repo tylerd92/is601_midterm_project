@@ -21,7 +21,8 @@ def calculator_repl():
                 command = input("\nEnter command: ").lower().strip()
 
                 if command == 'help':
-                    print("\nAvailable commands:")
+                    print(Fore.YELLOW)
+                    print("Available commands:")
                     print("  add, subtract, multiply, divide, power, root, modulus, int_divide, percent, abs_diff - Perform calculations")
                     print("  history - Show calculation history")
                     print("  clear - Clear calculation history")
@@ -29,47 +30,48 @@ def calculator_repl():
                     print("  redo - Redo the last undone calculation")
                     print("  save - Save calculation history to file")
                     print("  load - Load calculation history from file")
-                    print("  exit - Exit the calculator")
+                    print("  exit - Exit the calculator" + Style.RESET_ALL)
                     continue
                 
                 if command == 'exit':
                     try:
                         calc.save_history()
+                        print(Fore.GREEN)
                         print("History saved successfully.")
                     except Exception as e: # pragma no cover
                         print(f"Warning: Could not save history: {e}")
-                    print(Fore.GREEN + "Goodbye!")
+                    print(Fore.GREEN)
+                    print("Goodbye!")
                     break
 
                 if command == 'history':
                     history = calc.show_history()
                     if not history:
-                        print(Style.BRIGHT + Fore.CYAN +"No calculations in history") # pragma no cover
-                        print(Style.RESET_ALL)
+                        print("No calculations in history")
                     else:
                         print(Fore.MAGENTA +"\nCalculation History:")
                         for i, entry in enumerate(history, 1):
                             print(Fore.CYAN + f"{i}. {entry}")
-                        print(Style.RESET_ALL) 
+                        print(Style.RESET_ALL)
                     continue
 
                 if command == 'clear':
                     calc.clear_history()
-                    print("History cleared")
+                    print(Fore.RED + "History cleared" + Style.RESET_ALL)
                     continue
 
                 if command == 'undo':
                     if calc.undo():
-                        print("Operation undone")
+                        print(Fore.RED + "Operation undone" + Style.RESET_ALL)
                     else:
-                        print("Nothing to undo")
+                        print(Fore.RED + "Nothing to undo" + Style.RESET_ALL)
                     continue
 
                 if command == 'redo':
                     if calc.redo():
-                        print("Operation redone")
+                        print(Fore.RED + "Operation redone" + Style.RESET_ALL)
                     else:
-                        print("Nothing to redo")
+                        print(Fore.RED + "Nothing to redo" + Style.RESET_ALL)
                     continue
             
                 if command == 'save':
@@ -90,14 +92,14 @@ def calculator_repl():
 
                 if command in OperationFactory.get_operations():
                     try:
-                        print("\nEnter numbers (or 'cancel' to abort):")
+                        print("Enter numbers (or 'cancel' to abort):")
                         a = input("First number: ")
                         if a.lower() == 'cancel':
-                            print("Operation cancelled")
+                            print(Fore.RED + "Operation cancelled" + Style.RESET_ALL)
                             continue
                         b = input("Second number: ")
                         if b.lower() == 'cancel':
-                            print("Operation cancelled")
+                            print(Fore.RED + "Operation cancelled" + Style.RESET_ALL)
                             continue
                         
                         operation = OperationFactory.create_operation(command)
@@ -107,7 +109,7 @@ def calculator_repl():
                         if isinstance(result, Decimal):
                             result = result.normalize()
 
-                        print(f"\nResult: {result}")
+                        print(f"\nResult: {result}" + Style.RESET_ALL)
                     except (ValidationError, OperationError) as e:
                         print(f"Error: {e}")
                     except Exception as e:

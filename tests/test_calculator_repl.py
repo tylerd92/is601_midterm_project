@@ -16,7 +16,8 @@ from app.operations import OperationFactory
 @patch('builtins.print')
 def test_clear(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("History cleared")
+    found = any("History cleared" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=['add', '6', '7', 'save', 'exit'])
 @patch('builtins.print')
@@ -34,37 +35,43 @@ def test_load(mock_print, mock_input):
 @patch('builtins.print')
 def test_undo(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("Operation undone")
+    found = any("Operation undone" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=['undo', 'exit'])
 @patch('builtins.print')
 def test_no_undo(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("Nothing to undo")
+    found = any("Nothing to undo" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=['add', '3', '4', 'undo', 'redo', 'exit'])
 @patch('builtins.print')
 def test_redo(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("Operation redone")
+    found = any("Operation redone" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=['redo', 'exit'])
 @patch('builtins.print')
 def test_empty_redo(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("Nothing to redo")
+    found = any("Nothing to redo" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=['add', 'cancel', 'exit'])
 @patch('builtins.print')
 def test_cancel_first_operand(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("Operation cancelled")
+    found = any("Operation cancelled" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=['add', '3', 'cancel', 'exit'])
 @patch('builtins.print')
 def test_cancel_second_operand(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("Operation cancelled")
+    found = any("Operation cancelled" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=[KeyboardInterrupt, 'exit'])
 @patch('builtins.print')
@@ -72,11 +79,18 @@ def test_keyboard_interrupt(mock_print, mock_input):
     calculator_repl()
     mock_print.assert_any_call("\nOperation cancelled")
 
-@patch('builtins.input', side_effect=['history', 'exit'])
+@patch('builtins.input', side_effect=['add', '3', '4', 'history', 'exit'])
+@patch('builtins.print')
+def test_history_command(mock_print, mock_input):
+    calculator_repl()
+    found = any("Calculation History:" in str(call[0][0]) for call in mock_print.call_args_list)
+    assert found
+
+@patch('builtins.input', side_effect=['clear', 'history', 'exit'])
 @patch('builtins.print')
 def test_no_history(mock_print, mock_input):
     calculator_repl()
-    mock_print.assery_any_call("No calculations in history")
+    mock_print.assert_any_call("No calculations in history")
 
 @patch('builtins.input', side_effect=EOFError)
 @patch('builtins.print')
@@ -88,7 +102,8 @@ def test_eof_error(mock_print, mock_input):
 @patch('builtins.print')
 def test_unknown_command(mock_print, mock_input):
     calculator_repl()
-    mock_print.assery_any_call("Unknown command: mod. Type 'help' for available commands.")
+    found = any(f"Unknown command: 'mod'" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=[Exception, 'exit'])
 @patch('builtins.print')

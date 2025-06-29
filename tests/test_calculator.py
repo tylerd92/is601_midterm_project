@@ -13,6 +13,7 @@ from app.logger import LoggingObserver, AutoSaveObserver
 from app.operations import OperationFactory
 import logging
 from unittest.mock import patch, PropertyMock, MagicMock
+from colorama import Style
 
 @pytest.fixture
 def calculator():
@@ -141,13 +142,13 @@ def test_calculator_repl_exit(mock_print, mock_input):
 @patch('builtins.print')
 def test_calculator_repl_help(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("\nAvailable commands:")
+    mock_print.assert_any_call("Available commands:")
 
 @patch('builtins.input', side_effect=['add', '3', '4', 'exit'])
 @patch('builtins.print')
 def test_calculator_repl_addition(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("\nResult: 7")
+    mock_print.assert_any_call(f"\nResult: 7" + Style.RESET_ALL)
 
 @patch('app.calculator.logging.warning')
 @patch('app.calculator.Calculator._setup_logging')
