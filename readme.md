@@ -16,7 +16,7 @@ Install dependencies
 pip3 install -r requirements.txt
 ```
 
-Create an .env file in the root directory with these environment variable
+Create an .env file in the root directory with these environment variables
 NOTE: these environment variables are optional and a default value will be used if 
 the environment variable is not configured.
 ```
