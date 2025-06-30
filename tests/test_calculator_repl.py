@@ -23,13 +23,15 @@ def test_clear(mock_print, mock_input):
 @patch('builtins.print')
 def test_save(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("History saved successfully")
+    found = any("History saved successfully" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=['load', 'exit'])
 @patch('builtins.print')
 def test_load(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("History loaded successfully")
+    found = any("History loaded successfully" in str(call) for call in mock_print.call_args_list)
+    assert found
 
 @patch('builtins.input', side_effect=['add', '3', '4', 'undo', 'exit'])
 @patch('builtins.print')

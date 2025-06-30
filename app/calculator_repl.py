@@ -77,7 +77,7 @@ def calculator_repl():
                 if command == 'save':
                     try:
                         calc.save_history()
-                        print("History saved successfully")
+                        print(Fore.GREEN + "History saved successfully" + Style.RESET_ALL)
                     except Exception as e: # pragma: no cover
                         print(f"Error saving history: {e}")
                     continue
@@ -85,7 +85,7 @@ def calculator_repl():
                 if command == 'load': 
                     try:
                         calc.load_history()
-                        print("History loaded successfully")
+                        print(Fore.GREEN + "History loaded successfully" + Style.RESET_ALL)
                     except Exception as e: # pragma: no cover
                         print(f"Error loading history: {e}")
                     continue
