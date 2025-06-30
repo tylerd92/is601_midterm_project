@@ -52,3 +52,38 @@ exit - Exit the calculator
 ```
 
 Run tests by running the pytest command
+
+GitHub Actions
+In the .github/workflows directory there is a yaml file called python-app.yml. This file is the configuration
+of the GitHub Action workflow. This workflow enforces 100% unit test coverage in the main branch 
+if the test coverage is under 100% the job fails. When there is a push to the main branch or a pull request to the 
+main branch the workflow check to see if the test coverage is still at 100%.
+
+### Enhancements
+Using the colorama library, I added some coloring for the REPL output for the help command, undo command, 
+redo command, exit command, and error message for unknown operation.
+
+### Screenshots
+History
+
+![image](images/history.png)
+
+Help Menu
+
+![image](images/help%20menu.png)
+
+Undo command
+
+![image](images/undo.png)
+
+Redo command
+
+![image](images/redo.png)
+
+Exit command
+
+![image](images/exit%20command.png)
+
+Unknown Operation Error
+
+![image](images/unknown%20operation.png)
